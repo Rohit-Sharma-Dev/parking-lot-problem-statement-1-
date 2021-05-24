@@ -57,13 +57,20 @@ if (option==='park'){
 else if (option=='leave') {
     var find=false
     for (var i=0;i<=n;i++){
-        console.log(data[i])
+        // console.log(data[i])
         if (data[i].carNumber === cardata){
             numOfCars-=1
             find=true
             let yourdata=data[i]
             yourdata.exittime=`${today.getHours()}:${today.getMinutes()}`
             data[i]=""
+            let calc_hour=prompt('for how many hours did he parked his car')
+            calc_hour=parseInt(calc_hour)
+            var amount=10
+            if(calc_hour>2){
+                amount+=10*(calc_hour-2)
+            }
+            yourdata.amount=`$${amount}`
             console.log(yourdata)
             fs.writeFileSync('cardata.json',JSON.stringify(data,null))
             break
