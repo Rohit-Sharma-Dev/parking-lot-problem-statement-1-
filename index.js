@@ -1,3 +1,5 @@
-const prompt = require('prompt-sync')();
-const name = prompt('What is your name?');
-console.log(`Hey there ${name}`);
+var data={}
+for (var i=1;i<=n;i++){
+    data[i]=''
+}
+export default data
