@@ -4,10 +4,12 @@ const fs=require('fs')
 const prompt = require('prompt-sync')();
 app.use(express.json())
 let data=JSON.parse(fs.readFileSync('cardata.json'))
-n=5   // no. of parkin lot we gave
-for (var i=1;i<=n;i++){
-    if (!data[i]){
-        data[i]=""
+var n=5   // no. of parkin lot we gave
+var numOfCars=0 
+
+for (var i=0;i<n;i++){
+    if(data[i]!=""){
+        numOfCars++
     }
 }
 
@@ -20,42 +22,58 @@ const option=prompt('do want to leave or park(leave/park)')
 const today=new Date()
 
 if (option==='park'){
-    for (let i=1;i<=n;i++){
-        if (data[i]===""){
-            data[i]={
-                carNumber:cardata,
-                time:`${today.getHours()}:${today.getMinutes()} `
-            }
-            // console.log(`sorry but we are unable to serve you our services`);
-        break
-        }
+
+    if (numOfCars===n){
+        console.log(`space is not present`)
     }
-    console.log(data);
-    fs.writeFileSync('cardata.json',JSON.stringify(data,null))
+
+    else{
+        var isunique=false
+        for(let i=0;i<n;i++){
+            if (data[i].carNumber===cardata){
+                isunique=true
+                console.log(`this already exist`);
+                break
+            }
+        }
+        if (!isunique){
+            for (let i=0;i<n;i++){
+                if (data[i]===""){
+                    data[i]={
+                        carNumber:cardata,
+                        time:`${today.getHours()}:${today.getMinutes()}`,
+                        date:`${today.getDate()}:${today.getMonth()+1}:${today.getFullYear()}`
+                    }
+                numOfCars++
+    
+                console.log(data);
+                fs.writeFileSync('cardata.json',JSON.stringify(data,null))
+                break
+                }
+            }
+        }
+    }  
 }
 else if (option=='leave') {
-    for (let i=1;i<=n;i++){
-        // let carnumber=prompt('enter yoiu car number please')
-        if(cardata === data[i].carNumber){
-            delete data[i]
+    var find=false
+    for (var i=0;i<=n;i++){
+        console.log(data[i])
+        if (data[i].carNumber === cardata){
+            numOfCars-=1
+            find=true
+            let yourdata=data[i]
+            yourdata.exittime=`${today.getHours()}:${today.getMinutes()}`
             data[i]=""
-            console.log(data[i]);
-            console.log(data);
-
+            console.log(yourdata)
             fs.writeFileSync('cardata.json',JSON.stringify(data,null))
+            break
+        }
 
-        }
-        else{
-            console.log(`please enter the correct this carnumber ${cardata} is not correct`);
-        }
-        break
-        
-    }
 }
-
-
-
-
+if (!find){
+    console.log(`please enter the correct carnumber ${cardata} is not correct`);
+}
+}
 
 
 
