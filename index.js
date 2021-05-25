@@ -1,5 +1,8 @@
+const fs=require('fs')
 var data=[]
-for (var i=1;i<=n;i++){
+n=5
+for (var i=0;i<n;i++){
     data[i]=''
 }
-export default data
+
+fs.writeFileSync('cardata.json', JSON.stringify(data, null))
